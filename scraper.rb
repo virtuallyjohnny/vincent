@@ -1,3 +1,4 @@
+require 'scraperwiki'
 require 'mechanize'
 
 url = "http://www.vincent.wa.gov.au/Your_Community/Whats_On/Community_Consultation/Planning_Applications"
@@ -15,7 +16,7 @@ page.search('.listitemrow').each do |i|
     'date_scraped' => Date.today.to_s,
     'on_notice_to' => i.at('.listitemtext > b').next_sibling.inner_text.split('/').reverse.join('-')
   }
-  if (ScraperWiki.select("* from swdata where `council_reference`='#{record['council_reference']}'").empty? rescue true)
+  if (ScraperWiki.select("* from data where `council_reference`='#{record['council_reference']}'").empty? rescue true)
     ScraperWiki.save_sqlite(['council_reference'], record)
   else
     puts "Skipping already saved record " + record['council_reference']
