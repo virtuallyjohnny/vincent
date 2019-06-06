@@ -19,12 +19,31 @@ loop do
     
     # Extract all text after "Serial Number:" from the second paragraph under the div which has class "truncated-description".
     council_reference = details_page.search('div.truncated-description p')[1].inner_text.gsub(/[\r\n]/, "").sub(/.*Serial Number:/, '').squeeze(' ').strip
-    
+
     # Attempt to find a date.
+
     # Extract all text from the first <b>...</b> element under the div which has class "truncated-description" (and trim the trailing ".").
-    possible_date_1 = li.search('div.truncated-description b')[0].inner_text.gsub(/[\r\n]/, "").squeeze(' ').strip.gsub(/\.$/, '')
+    possible_date_1_element = li.search('div.truncated-description b')[0]
+    if (possible_date_1_element.nil?)
+      possible_date_1_element = li.search('div.truncated-description strong')[0]
+    end
+    if (!possible_date_1_element.nil?)
+      possible_date_1 = possible_date_1_element.inner_text.gsub(/[\r\n]/, "").squeeze(' ').strip.gsub(/\.$/, '')
+    else
+      possible_date_1 = ""
+    end
+    
     # Extract all text from the second <b>...</b> element under the div which has class "truncated-description" (and trim the trailing ".").
-    possible_date_2 = li.search('div.truncated-description b')[1].inner_text.gsub(/[\r\n]/, "").squeeze(' ').strip.gsub(/\.$/, '')
+    possible_date_2_element = li.search('div.truncated-description b')[1]
+    if (possible_date_2_element.nil?)
+      possible_date_2_element = li.search('div.truncated-description string')[1]
+    end
+    if (!possible_date_2_element.nil?)
+      possible_date_2 = possible_date_2_element.inner_text.gsub(/[\r\n]/, "").squeeze(' ').strip.gsub(/\.$/, '')
+    else
+      possible_date_2 = ""
+    end
+    
     matches_1 = possible_date_1.scan(/\b[0-9][0-9]?\s+[A-Z][A-Z][A-Z][A-Z]?\s+[0-9][0-9][0-9][0-9]$/i)
     matches_2 = possible_date_2.scan(/\b[0-9][0-9]?\s+[A-Z][A-Z][A-Z][A-Z]?\s+[0-9][0-9][0-9][0-9]$/i)
     parsed_date = ""
