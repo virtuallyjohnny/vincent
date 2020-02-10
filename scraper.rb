@@ -1,7 +1,7 @@
 require 'scraperwiki'
 require 'mechanize'
 
-url = "https://imagine.vincent.wa.gov.au/planning-consultations"
+url = "https://imagine.vincent.wa.gov.au/development-applications"
 
 agent = Mechanize.new
 page_number = 0
